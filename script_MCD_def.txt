@@ -1,0 +1,61 @@
+Sub Create_Tables()
+
+DoCmd.RunSQL "CREATE TABLE regions(" & _
+   "code_region INT," & _
+   "nom_region VARCHAR(200)," & _
+   "Territoire VARCHAR(200)," & _
+   "PRIMARY KEY(code_region)" & _
+");"   
+
+DoCmd.RunSQL "CREATE TABLE table_date(" & _
+   "id_date INT," & _
+   "annee INT," & _
+   "mois VARCHAR(50)," & _
+   "trimestre INT," & _
+   "PRIMARY KEY(id_date)" & _
+");"   
+
+DoCmd.RunSQL "CREATE TABLE categorie_touriste(" & _
+   "id_categorie DECIMAL(15,2)," & _
+   "categorie VARCHAR(200)," & _
+   "PRIMARY KEY(id_categorie)" & _
+");"   
+
+DoCmd.RunSQL "CREATE TABLE region_depart(" & _
+   "id_provenance INT," & _
+   "provenance VARCHAR(400)," & _
+   "PRIMARY KEY(id_provenance)" & _
+");"   
+
+DoCmd.RunSQL "CREATE TABLE departement(" & _
+   "code_departement VARCHAR(50)," & _
+   "nom_departement VARCHAR(200)," & _
+   "code_region INT NOT NULL," & _
+   "PRIMARY KEY(code_departement)," & _
+   "FOREIGN KEY(code_region) REFERENCES regions(code_region)" & _
+");"   
+
+DoCmd.RunSQL "CREATE TABLE zone_origine_touristes(" & _
+   "id_date INT," & _
+   "id_provenance INT," & _
+   "quantite INT," & _
+   "destination VARCHAR(400)," & _
+   "PRIMARY KEY(id_date, id_provenance)," & _
+   "FOREIGN KEY(id_date) REFERENCES table_date(id_date)," & _
+   "FOREIGN KEY(id_provenance) REFERENCES region_depart(id_provenance)" & _
+");"   
+
+DoCmd.RunSQL "CREATE TABLE indicateurs_tourisme(" & _
+   "code_departement VARCHAR(50)," & _
+   "id_date INT," & _
+   "id_categorie DECIMAL(15,2)," & _
+   "arrivees DECIMAL(15,2)," & _
+   "nuitees DECIMAL(15,2)," & _
+   "taux_occupation DECIMAL(15,2)," & _
+   "PRIMARY KEY(code_departement, id_date, id_categorie)," & _
+   "FOREIGN KEY(code_departement) REFERENCES departement(code_departement)," & _
+   "FOREIGN KEY(id_date) REFERENCES table_date(id_date)," & _
+   "FOREIGN KEY(id_categorie) REFERENCES categorie_touriste(id_categorie)" & _
+");"   
+
+End Sub
